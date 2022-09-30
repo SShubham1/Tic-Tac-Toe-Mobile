@@ -1,5 +1,4 @@
-import { useDeviceOrientation } from '@react-native-community/hooks';
-import { StatusBar, Platform, StyleSheet, SafeAreaView, View, Appearance } from 'react-native'
+import { StatusBar, Appearance } from 'react-native'
 import MainScreen from './app/screens/MainScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -9,8 +8,10 @@ import { Provider } from 'react-native-paper';
 import RoomScreen from './app/screens/RoomScreen';
 import { HEAD_BG_COLOR_DARK, HEAD_BG_COLOR_LIGHT } from './app/colors';
 
-const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 const Stack = createStackNavigator();
+
+
+
 
 export default function App() {
   const [isDark, setisDark] = React.useState(Appearance.getColorScheme() === "dark");
@@ -32,6 +33,6 @@ export default function App() {
           </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
-    </Provider>
+    </Provider >
   );
 }
