@@ -10,12 +10,18 @@ interface MainScreenProps {
 }
 
 function MainScreen({ isDark, navigation }: MainScreenProps) {
-    const [isGame, setisGame] = React.useState(false);
+    const [isGame, setIsGame] = React.useState(false);
+    const [playerName, setPlayerName] = React.useState("");
+    const [player, setPlayer] = React.useState(('X' as 'X' | 'O'));
+    const [room, setRoom] = React.useState("");
+
     return (<>
         {
             !isGame ?
-                <HomeComponent isDark={isDark} navigation={navigation} /> :
-                <GameComponent isDark={isDark} navigation={navigation} />
+                <HomeComponent isDark={isDark} setPlayer={setPlayer} setPlayerName={setPlayerName}
+                    playerName={playerName} setRoom={setRoom} room={room}
+                    setIsGame={setIsGame} player={player} navigation={navigation} /> :
+                <GameComponent setIsGame={setIsGame} isDark={isDark} navigation={navigation} />
         }
     </>)
 }
