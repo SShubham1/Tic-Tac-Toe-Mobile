@@ -8,10 +8,10 @@ import { favicon } from '../favicon';
 
 interface NavigationBarProps extends StackHeaderProps {
     isDark: boolean;
-    setisDark: React.Dispatch<React.SetStateAction<boolean>>;
+    setisDark: (isDark: boolean) => void;
 }
 
-export default function NavigationBar({ navigation, back, isDark, setisDark }: NavigationBarProps) {
+export default function CustomAppBar({ navigation, back, isDark, setisDark }: NavigationBarProps) {
     const route = useRoute();
     return (
         <Appbar.Header style={{ backgroundColor: isDark ? HEAD_BG_COLOR_DARK : HEAD_BG_COLOR_LIGHT }}>

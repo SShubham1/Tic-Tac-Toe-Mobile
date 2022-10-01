@@ -22,7 +22,7 @@ function Rooms({ isDark }: RoomScreenProps) {
     });
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Rooms</Text>
+            <Text style={styles.text}>No Room Available!</Text>
         </View>
     )
 }
