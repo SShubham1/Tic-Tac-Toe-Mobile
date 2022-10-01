@@ -87,7 +87,7 @@ function HomeComponent({ isDark, navigation, player, setPlayer, setIsGame, playe
                     </TouchableNativeFeedback>
                 </View>
             </View>
-            <Button title='List All Rooms' onPress={() => navigation.navigate("Room")} />
+            <Button title='List All Rooms' onPress={() => navigation.navigate("Rooms")} />
         </ScrollView >
     )
 }

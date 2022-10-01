@@ -39,7 +39,7 @@ export default function App() {
           <Stack.Screen name="Home">
             {props => <MainScreen {...props} isDark={isDark} />}
           </Stack.Screen>
-          <Stack.Screen name="Room">
+          <Stack.Screen name="Rooms">
             {props => <RoomScreen {...props} isDark={isDark} />}
           </Stack.Screen>
         </Stack.Navigator>

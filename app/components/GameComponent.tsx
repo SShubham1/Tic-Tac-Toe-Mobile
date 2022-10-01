@@ -11,9 +11,15 @@ interface GameComponentProps {
     isDark: boolean;
     navigation: StackNavigationProp<ParamListBase, "Home", undefined>;
     setIsGame: React.Dispatch<React.SetStateAction<boolean>>;
+    xName: string;
+    oName: string;
+    xScore: number;
+    oScore: number;
+    drawScore: number;
+    roomId: string;
 }
 
-const GameComponent = ({ isDark, setIsGame }: GameComponentProps) => {
+const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawScore, roomId }: GameComponentProps) => {
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -36,7 +42,7 @@ const GameComponent = ({ isDark, setIsGame }: GameComponentProps) => {
             justifyContent: 'center',
             flexGrow: 1,
         }} style={styles.container}>
-            <Text style={[styles.text, { fontSize: 30, fontWeight: "bold" }]}>Room ID: </Text>
+            <Text style={[styles.text, { fontSize: 30, fontWeight: "bold" }]}>Room ID: {roomId}</Text>
             <View style={{ flexDirection: "column" }}>
                 <View style={{ flexDirection: "row" }}>
                     <TouchableNativeFeedback>
@@ -76,20 +82,20 @@ const GameComponent = ({ isDark, setIsGame }: GameComponentProps) => {
                 <View>
                     <View style={{ flexDirection: "row" }}>
                         <SvgXml xml={xSvg} />
-                        <Text style={[styles.text, { fontSize: 20, textAlignVertical: "center" }]}>: 0</Text>
+                        <Text style={[styles.text, { fontSize: 20, textAlignVertical: "center" }]}>: {xScore}</Text>
                     </View>
-                    <Text style={[styles.text, { fontSize: 20, textAlign: "center" }]}>XName</Text>
+                    <Text style={[styles.text, { fontSize: 20, textAlign: "center" }]}>{xName}</Text>
                 </View>
                 <View style={{ flexDirection: "row" }}>
                     <SvgXml xml={drawSvg} width={80} />
-                    <Text style={[styles.text, { fontSize: 20, textAlignVertical: "center" }]}>: 0</Text>
+                    <Text style={[styles.text, { fontSize: 20, textAlignVertical: "center" }]}>: {drawScore}</Text>
                 </View>
                 <View>
                     <View style={{ flexDirection: "row" }}>
                         <SvgXml xml={oSvg} />
-                        <Text style={[styles.text, { fontSize: 20, textAlignVertical: "center" }]}>: 0</Text>
+                        <Text style={[styles.text, { fontSize: 20, textAlignVertical: "center" }]}>: {oScore}</Text>
                     </View>
-                    <Text style={[styles.text, { fontSize: 20, textAlign: "center" }]}>OName</Text>
+                    <Text style={[styles.text, { fontSize: 20, textAlign: "center" }]}>{oName}</Text>
                 </View>
             </View>
             <Text style={[styles.text, { fontSize: 18, fontWeight: "500" }]}>Waiting for player to join the Game...</Text>

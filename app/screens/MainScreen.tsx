@@ -21,7 +21,7 @@ function MainScreen({ isDark, navigation }: MainScreenProps) {
                 <HomeComponent isDark={isDark} setPlayer={setPlayer} setPlayerName={setPlayerName}
                     playerName={playerName} setRoom={setRoom} room={room}
                     setIsGame={setIsGame} player={player} navigation={navigation} /> :
-                <GameComponent setIsGame={setIsGame} isDark={isDark} navigation={navigation} />
+                <GameComponent xName='XName' oName='OName' oScore={0} xScore={0} drawScore={0} roomId={"string"} setIsGame={setIsGame} isDark={isDark} navigation={navigation} />
         }
     </>)
 }
