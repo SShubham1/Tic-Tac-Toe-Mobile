@@ -7,24 +7,24 @@ import CustomAppBar from './app/components/CustomAppBar';
 import { Provider } from 'react-native-paper';
 import RoomScreen from './app/screens/RoomScreen';
 import { HEAD_BG_COLOR_DARK, HEAD_BG_COLOR_LIGHT } from './app/colors';
-import { AsyncStorage } from 'react-native'
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import { io } from 'socket.io-client';
 
 const Stack = createStackNavigator();
-
-
-
+const AsyncStorage = useAsyncStorage("theme");
 
 export default function App() {
   const [isDark, setisDark] = React.useState(Appearance.getColorScheme() === "dark");
+  const socketRef = React.useRef(io("https://tic-tac-toe-multiplayer-blue.herokuapp.com", { path: "/api/rooms" }));
   function setDark(isDark: boolean) {
     setisDark(isDark);
-    AsyncStorage.setItem("theme", isDark ? "dark" : "light");
+    AsyncStorage.setItem(isDark ? "dark" : "light");
   }
-  AsyncStorage.getItem("theme").then(theme => {
+  AsyncStorage.getItem().then(theme => {
     if (theme)
       setisDark(theme === "dark");
     else
-      AsyncStorage.setItem("theme", isDark ? "dark" : "light");
+      AsyncStorage.setItem(isDark ? "dark" : "light");
   })
   StatusBar.setBackgroundColor(isDark ? HEAD_BG_COLOR_DARK : HEAD_BG_COLOR_LIGHT);
   StatusBar.setBarStyle(isDark ? "light-content" : "dark-content");
@@ -37,7 +37,7 @@ export default function App() {
             header: (props) => <CustomAppBar isDark={isDark} setisDark={setDark} {...props} />,
           }}>
           <Stack.Screen name="Home">
-            {props => <MainScreen {...props} isDark={isDark} />}
+            {props => <MainScreen {...props} isDark={isDark} socketRef={socketRef} />}
           </Stack.Screen>
           <Stack.Screen name="Rooms">
             {props => <RoomScreen {...props} isDark={isDark} />}

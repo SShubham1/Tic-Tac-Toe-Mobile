@@ -26,7 +26,7 @@ function Rooms({ isDark }: RoomScreenProps) {
     const [rooms, setRooms] = React.useState(([] as Room[]));
     React.useEffect(() => {
         fetch("https://tic-tac-toe-multiplayer-blue.herokuapp.com/api/rooms").then(res => res.json()).then((data: Room[]) => setRooms(data));
-    }, [rooms])
+    }, [rooms]);
 
     const styles = StyleSheet.create({
         container: {
