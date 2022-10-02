@@ -1,6 +1,6 @@
 import { ParamListBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Text, View, Button, StyleSheet, TextInput, TouchableNativeFeedback, ScrollView } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { APP_BG_COLOR_DARK, APP_BG_COLOR_LIGHT, BLUE_BUTTON_COLOR } from '../colors';
@@ -64,8 +64,10 @@ function HomeComponent({ isDark, navigation, player, setPlayer, setIsGame, playe
                         </TouchableNativeFeedback>
                     </View>
                     <TouchableNativeFeedback onPress={() => {
-                        setIsGame(true);
-                        setPlayerName(hostName);
+                        if (hostName) {
+                            setPlayerName(hostName)
+                            setIsGame(true);
+                        }
                     }}>
                         <View style={{ backgroundColor: BLUE_BUTTON_COLOR, borderRadius: 5, alignSelf: "center", marginTop: 1, marginBottom: 1 }}>
                             <Text style={{ fontSize: 18, color: "white", padding: 5 }}>

@@ -20,9 +20,10 @@ interface GameComponentProps {
     oScore: number;
     drawScore: number;
     player: "X" | "O";
+    setPlayerName: React.Dispatch<React.SetStateAction<string>>;
 }
 
-const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawScore, player }: GameComponentProps) => {
+const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawScore, player, setPlayerName }: GameComponentProps) => {
     const socketRef = React.useRef((undefined as ReturnType<typeof io> | undefined));
     const [room, setRoom] = React.useState((undefined as Room | undefined));
     useEffect(() => {
@@ -32,6 +33,7 @@ const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawSc
         });
         socketRef.current.on("disconnect", () => {
             setIsGame(false);
+            setPlayerName("");
         })
         socketRef.current.on("room-created", (p_room: Room) => {
             setRoom(p_room);
@@ -53,6 +55,11 @@ const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawSc
             borderRadius: 10,
         }
     });
+    function leaveGame() {
+        setPlayerName("");
+        setIsGame(false);
+    }
+
     return (
         <ScrollView contentContainerStyle={{
             alignItems: 'center',
@@ -116,7 +123,7 @@ const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawSc
                 </View>
             </View>
             <Text style={[styles.text, { fontSize: 18, fontWeight: "500" }]}>Waiting for player to join the Game...</Text>
-            <TouchableNativeFeedback onPress={() => { socketRef.current?.disconnect(); }}>
+            <TouchableNativeFeedback onPress={() => { socketRef.current?.connected ? socketRef.current?.disconnect() : leaveGame() }}>
                 <View style={{ backgroundColor: "red", borderRadius: 5, alignSelf: "center", marginTop: 10, marginBottom: 1 }}>
                     <Text style={{ fontSize: 18, color: "white", padding: 5 }}>
                         Leave
