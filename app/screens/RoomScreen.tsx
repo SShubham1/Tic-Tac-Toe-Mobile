@@ -11,15 +11,15 @@ interface RoomScreenProps extends StackScreenProps<ParamListBase, "Rooms"> {
 }
 
 interface Room {
-    "guest": {
-        "player": 'O' | 'X';
+    guest: {
+        player: 'O' | 'X';
     };
-    "host": {
-        "id": string;
-        "name": string;
+    host: {
+        id: string;
+        name: string;
     };
-    "id": string;
-    "isFull": boolean;
+    id: string;
+    isFull: boolean;
 }
 
 function Rooms({ isDark }: RoomScreenProps) {

@@ -1,25 +1,38 @@
 import { ParamListBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableNativeFeedback, ScrollView } from 'react-native'
 import { SvgXml } from 'react-native-svg';
 import { APP_BG_COLOR_DARK, APP_BG_COLOR_LIGHT } from '../colors';
 import { drawSvg } from '../draw';
 import { oSvg } from '../o';
 import { xSvg } from '../x';
+import { io } from 'socket.io-client';
 
 interface GameComponentProps {
     isDark: boolean;
     navigation: StackNavigationProp<ParamListBase, "Home", undefined>;
     setIsGame: React.Dispatch<React.SetStateAction<boolean>>;
-    xName: string;
-    oName: string;
+    xName?: string;
+    oName?: string;
     xScore: number;
     oScore: number;
     drawScore: number;
-    roomId: string;
+    roomId?: string;
+    player: "X" | "O";
 }
 
-const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawScore, roomId }: GameComponentProps) => {
+const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawScore, roomId, player }: GameComponentProps) => {
+    const socketRef = React.useRef((undefined as ReturnType<typeof io> | undefined));
+    useEffect(() => {
+        socketRef.current = io("https://tic-tac-toe-multiplayer-blue.herokuapp.com/", { path: "/api/rooms" });
+        socketRef.current.on("connect", () => {
+            socketRef.current?.emit("create-room", { player: player, name: player === "X" ? xName ? xName : "Anonymous" : oName ? oName : "Anonymous" });
+        });
+        socketRef.current.on("disconnect", () => {
+            setIsGame(false);
+        })
+    }, [socketRef])
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -86,8 +99,8 @@ const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawSc
                     </View>
                     <Text style={[styles.text, { fontSize: 20, textAlign: "center" }]}>{xName}</Text>
                 </View>
-                <View style={{ flexDirection: "row" }}>
-                    <SvgXml xml={drawSvg} width={80} />
+                <View style={{ flexDirection: "row", height: 60 }}>
+                    <SvgXml xml={drawSvg} height={60} width={80} style={{ alignItems: "center" }} />
                     <Text style={[styles.text, { fontSize: 20, textAlignVertical: "center" }]}>: {drawScore}</Text>
                 </View>
                 <View>
@@ -99,7 +112,7 @@ const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawSc
                 </View>
             </View>
             <Text style={[styles.text, { fontSize: 18, fontWeight: "500" }]}>Waiting for player to join the Game...</Text>
-            <TouchableNativeFeedback onPress={() => setIsGame(false)}>
+            <TouchableNativeFeedback onPress={() => { socketRef.current?.disconnect(); }}>
                 <View style={{ backgroundColor: "red", borderRadius: 5, alignSelf: "center", marginTop: 10, marginBottom: 1 }}>
                     <Text style={{ fontSize: 18, color: "white", padding: 5 }}>
                         Leave

@@ -7,7 +7,6 @@ import { APP_BG_COLOR_DARK, APP_BG_COLOR_LIGHT, BLUE_BUTTON_COLOR } from '../col
 import { oSvg } from '../o';
 import { xSvg } from '../x';
 import { useDeviceOrientation } from '@react-native-community/hooks';
-import { io, Socket } from 'socket.io-client';
 
 interface HomeComponentProps {
     isDark: boolean;
@@ -16,12 +15,11 @@ interface HomeComponentProps {
     setPlayer: React.Dispatch<React.SetStateAction<"X" | "O">>;
     setIsGame: React.Dispatch<React.SetStateAction<boolean>>;
     playerName: string;
-    room: string;
+    room: string | undefined;
     setPlayerName: React.Dispatch<React.SetStateAction<string>>;
-    setRoom: React.Dispatch<React.SetStateAction<string>>;
-    socketRef: ReturnType<typeof React.useRef<ReturnType<typeof io>>>;
+    setRoom: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
-function HomeComponent({ isDark, navigation, player, setPlayer, setIsGame, playerName, setPlayerName, socketRef }: HomeComponentProps) {
+function HomeComponent({ isDark, navigation, player, setPlayer, setIsGame, playerName, setPlayerName }: HomeComponentProps) {
     const isLandscape = useDeviceOrientation().landscape;
     const [room, setRoom] = React.useState("");
     const [joinName, setJoinName] = React.useState("");
@@ -67,8 +65,7 @@ function HomeComponent({ isDark, navigation, player, setPlayer, setIsGame, playe
                     </View>
                     <TouchableNativeFeedback onPress={() => {
                         setIsGame(true);
-                        if (socketRef.current)
-                            socketRef.current.emit("create-room", { player: player, name: playerName ? playerName : "Anonymous" });
+                        setPlayerName(hostName);
                     }}>
                         <View style={{ backgroundColor: BLUE_BUTTON_COLOR, borderRadius: 5, alignSelf: "center", marginTop: 1, marginBottom: 1 }}>
                             <Text style={{ fontSize: 18, color: "white", padding: 5 }}>

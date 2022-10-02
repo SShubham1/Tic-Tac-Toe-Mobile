@@ -15,7 +15,7 @@ const AsyncStorage = useAsyncStorage("theme");
 
 export default function App() {
   const [isDark, setisDark] = React.useState(Appearance.getColorScheme() === "dark");
-  const socketRef = React.useRef(io("https://tic-tac-toe-multiplayer-blue.herokuapp.com", { path: "/api/rooms" }));
+
   function setDark(isDark: boolean) {
     setisDark(isDark);
     AsyncStorage.setItem(isDark ? "dark" : "light");
@@ -37,7 +37,7 @@ export default function App() {
             header: (props) => <CustomAppBar isDark={isDark} setisDark={setDark} {...props} />,
           }}>
           <Stack.Screen name="Home">
-            {props => <MainScreen {...props} isDark={isDark} socketRef={socketRef} />}
+            {props => <MainScreen {...props} isDark={isDark} />}
           </Stack.Screen>
           <Stack.Screen name="Rooms">
             {props => <RoomScreen {...props} isDark={isDark} />}
