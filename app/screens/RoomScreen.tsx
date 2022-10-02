@@ -10,7 +10,7 @@ interface RoomScreenProps extends StackScreenProps<ParamListBase, "Rooms"> {
     isDark: boolean;
 }
 
-interface Room {
+export interface Room {
     guest: {
         player: 'O' | 'X';
     };

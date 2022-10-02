@@ -1,8 +1,6 @@
 import { ParamListBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react'
-import { io, Socket } from 'socket.io-client';
-import DefaultEventsMap from 'socket.io-client'
 import GameComponent from '../components/GameComponent';
 import HomeComponent from '../components/HomeComponent';
 
@@ -24,7 +22,7 @@ function MainScreen({ isDark, navigation }: MainScreenProps) {
                     playerName={playerName} setRoom={setRoom} room={room}
                     setIsGame={setIsGame} player={player} navigation={navigation} /> :
                 <GameComponent xName={player === "X" ? playerName : undefined} oName={player === "O" ? playerName : undefined}
-                    oScore={0} xScore={0} drawScore={0} roomId={room}
+                    oScore={0} xScore={0} drawScore={0}
                     setIsGame={setIsGame} player={player} isDark={isDark} navigation={navigation} />
         }
     </>)

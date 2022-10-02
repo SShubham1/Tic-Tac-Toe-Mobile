@@ -8,6 +8,7 @@ import { drawSvg } from '../draw';
 import { oSvg } from '../o';
 import { xSvg } from '../x';
 import { io } from 'socket.io-client';
+import { Room } from '../screens/RoomScreen';
 
 interface GameComponentProps {
     isDark: boolean;
@@ -18,12 +19,12 @@ interface GameComponentProps {
     xScore: number;
     oScore: number;
     drawScore: number;
-    roomId?: string;
     player: "X" | "O";
 }
 
-const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawScore, roomId, player }: GameComponentProps) => {
+const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawScore, player }: GameComponentProps) => {
     const socketRef = React.useRef((undefined as ReturnType<typeof io> | undefined));
+    const [room, setRoom] = React.useState((undefined as Room | undefined));
     useEffect(() => {
         socketRef.current = io("https://tic-tac-toe-multiplayer-blue.herokuapp.com/", { path: "/api/rooms" });
         socketRef.current.on("connect", () => {
@@ -32,7 +33,10 @@ const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawSc
         socketRef.current.on("disconnect", () => {
             setIsGame(false);
         })
-    }, [socketRef])
+        socketRef.current.on("room-created", (p_room: Room) => {
+            setRoom(p_room);
+        })
+    }, [socketRef, setRoom, setIsGame])
     const styles = StyleSheet.create({
         container: {
             flex: 1,
@@ -55,7 +59,7 @@ const GameComponent = ({ isDark, setIsGame, xName, xScore, oName, oScore, drawSc
             justifyContent: 'center',
             flexGrow: 1,
         }} style={styles.container}>
-            <Text style={[styles.text, { fontSize: 30, fontWeight: "bold" }]}>Room ID: {roomId}</Text>
+            <Text style={[styles.text, { fontSize: 30, fontWeight: "bold" }]}>Room ID: {room?.id}</Text>
             <View style={{ flexDirection: "column" }}>
                 <View style={{ flexDirection: "row" }}>
                     <TouchableNativeFeedback>
