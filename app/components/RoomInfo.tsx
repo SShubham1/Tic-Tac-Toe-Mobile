@@ -7,7 +7,7 @@ interface RoomInfoProps {
     isDark: boolean;
     hostName: string;
     hostPlayer: 'X' | 'O';
-    roomId: "string";
+    roomId: string;
 }
 
 const RoomInfo = ({ isDark, hostName, hostPlayer, roomId }: RoomInfoProps) => {
@@ -15,7 +15,8 @@ const RoomInfo = ({ isDark, hostName, hostPlayer, roomId }: RoomInfoProps) => {
         container: {
             backgroundColor: isDark ? "purple" : "lightblue",
             width: "99%",
-            padding: 10
+            padding: 10,
+            margin: 2
         },
         text: {
             color: isDark ? "white" : "black",

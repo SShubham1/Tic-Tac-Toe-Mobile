@@ -43,7 +43,9 @@ function Rooms({ isDark }: RoomScreenProps) {
             {
                 rooms.length === 0 ?
                     <Text style={styles.text}>No Room Available!</Text> :
-                    <RoomInfo isDark={isDark} hostName={""} hostPlayer={"X"} roomId={"string"}></RoomInfo>
+                    rooms.map((room, index) => {
+                        return <RoomInfo isDark={isDark} hostName={room.host.name} hostPlayer={room.guest.player === "O" ? "X" : "O"} roomId={room.id} key={index} />
+                    })
             }
         </ScrollView>
     )
