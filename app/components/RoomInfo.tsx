@@ -1,3 +1,5 @@
+import { ParamListBase } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import { View, Text, StyleSheet, Button } from 'react-native'
 import { SvgXml } from 'react-native-svg';
 import { oSvg } from '../o';
@@ -8,9 +10,16 @@ interface RoomInfoProps {
     hostName: string;
     hostPlayer: 'X' | 'O';
     roomId: string;
+    joinName: string;
+    navigation: StackNavigationProp<ParamListBase, "Rooms", undefined>;
+    setIsGame: React.Dispatch<React.SetStateAction<boolean>>;
+    playerName: string;
+
 }
 
-const RoomInfo = ({ isDark, hostName, hostPlayer, roomId }: RoomInfoProps) => {
+
+
+const RoomInfo = ({ isDark, hostName, hostPlayer, roomId, joinName, navigation, setIsGame, playerName }: RoomInfoProps) => {
     const styles = StyleSheet.create({
         container: {
             backgroundColor: isDark ? "purple" : "lightblue",
@@ -22,6 +31,13 @@ const RoomInfo = ({ isDark, hostName, hostPlayer, roomId }: RoomInfoProps) => {
             color: isDark ? "white" : "black",
         }
     })
+
+    const onJoinClick = () => {
+        if (joinName.trim()) {
+            navigation.navigate("Home", { roomId: roomId, playerName: playerName });
+            setIsGame(true);
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -41,7 +57,7 @@ const RoomInfo = ({ isDark, hostName, hostPlayer, roomId }: RoomInfoProps) => {
                     </View>
                 </View>
                 <View style={{ alignSelf: "center" }}>
-                    <Button title={"Join"} />
+                    <Button title={"Join"} onPress={onJoinClick} />
                 </View>
             </View>
         </View>

@@ -1,6 +1,6 @@
 import { ParamListBase } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Text, View, Button, StyleSheet, TextInput, TouchableNativeFeedback, ScrollView } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 import { APP_BG_COLOR_DARK, APP_BG_COLOR_LIGHT, BLUE_BUTTON_COLOR } from '../colors';
@@ -19,9 +19,8 @@ interface HomeComponentProps {
     setPlayerName: React.Dispatch<React.SetStateAction<string>>;
     setRoom: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
-function HomeComponent({ isDark, navigation, player, setPlayer, setIsGame, playerName, setPlayerName }: HomeComponentProps) {
+function HomeComponent({ isDark, navigation, player, setPlayer, setIsGame, setPlayerName, room, setRoom }: HomeComponentProps) {
     const isLandscape = useDeviceOrientation().landscape;
-    const [room, setRoom] = React.useState("");
     const [joinName, setJoinName] = React.useState("");
     const [hostName, setHostName] = React.useState("");
     const styles = StyleSheet.create({
@@ -64,7 +63,7 @@ function HomeComponent({ isDark, navigation, player, setPlayer, setIsGame, playe
                         </TouchableNativeFeedback>
                     </View>
                     <TouchableNativeFeedback onPress={() => {
-                        if (hostName) {
+                        if (hostName.trim()) {
                             setPlayerName(hostName)
                             setIsGame(true);
                         }
@@ -82,7 +81,13 @@ function HomeComponent({ isDark, navigation, player, setPlayer, setIsGame, playe
                     </Text>
                     <TextInput maxLength={20} textAlign={"center"} disableFullscreenUI={true} placeholderTextColor={isDark ? "grey" : ""} style={styles.input} value={joinName} onChangeText={setJoinName} placeholder={"Enter your Name"} />
                     <TextInput maxLength={20} textAlign={"center"} disableFullscreenUI={true} placeholderTextColor={isDark ? "grey" : ""} style={styles.input} value={room} onChangeText={setRoom} placeholder={"Enter Room ID"} />
-                    <TouchableNativeFeedback>
+                    <TouchableNativeFeedback onPress={() => {
+                        if (joinName.trim() && room?.trim()) {
+                            setPlayerName(joinName);
+                            setRoom(room);
+                            setIsGame(true);
+                        }
+                    }}>
                         <View style={{ backgroundColor: BLUE_BUTTON_COLOR, borderRadius: 5, alignSelf: "center", marginTop: 1, marginBottom: 1 }}>
                             <Text style={{ fontSize: 18, color: "white", padding: 5 }}>
                                 Join

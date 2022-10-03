@@ -1,13 +1,16 @@
 import { ParamListBase } from "@react-navigation/native";
 import { StackScreenProps } from "@react-navigation/stack";
 import React from "react";
-import { StyleSheet, ScrollView, Text } from "react-native"
+import { StyleSheet, ScrollView, Text, ActivityIndicator, View, Animated } from "react-native"
+import { TextInput } from "react-native";
 import { APP_BG_COLOR_DARK, APP_BG_COLOR_LIGHT } from "../colors";
 import RoomInfo from "../components/RoomInfo";
 
 
 interface RoomScreenProps extends StackScreenProps<ParamListBase, "Rooms"> {
     isDark: boolean;
+    setIsGame: React.Dispatch<React.SetStateAction<boolean>>;
+    isGame: boolean;
 }
 
 export interface Room {
@@ -22,10 +25,28 @@ export interface Room {
     isFull: boolean;
 }
 
-function Rooms({ isDark }: RoomScreenProps) {
-    const [rooms, setRooms] = React.useState(([] as Room[]));
+
+function Rooms({ isDark, navigation, setIsGame }: RoomScreenProps) {
+    const [name, setName] = React.useState("");
+    const [rooms, setRooms] = React.useState(([] as Room[] | undefined));
+    const [isFetched, setIsFetched] = React.useState(false);
+    const animPos = React.useRef(new Animated.Value(0)).current;
     React.useEffect(() => {
-        fetch("https://tic-tac-toe-multiplayer-blue.herokuapp.com/api/rooms").then(res => res.json()).then((data: Room[]) => setRooms(data));
+        fetch("https://tic-tac-toe-multiplayer-blue.herokuapp.com/api/rooms").then((res) => {
+            if (res.ok) {
+                return res.json()
+            } else {
+                setIsFetched(true)
+                setRooms(undefined)
+            }
+        }).then((data: Room[]) => {
+            setRooms(data);
+            setIsFetched(true)
+        }).catch(() => {
+            setIsFetched(true)
+            setRooms(undefined)
+        }
+        );
     }, [rooms]);
 
     const styles = StyleSheet.create({
@@ -36,18 +57,51 @@ function Rooms({ isDark }: RoomScreenProps) {
         },
         text: {
             color: isDark ? "white" : "black",
-        }
+        },
+        input: {
+            height: 40,
+            margin: 1,
+            color: isDark ? "white" : "black",
+            backgroundColor: isDark ? APP_BG_COLOR_DARK : APP_BG_COLOR_LIGHT,
+            borderWidth: 1,
+            borderColor: isDark ? "white" : "black",
+            padding: 10,
+            borderRadius: 10
+        },
     });
+
+    const onAnimPos = () => {
+        Animated.timing(
+            animPos, { toValue: 1, duration: 100, useNativeDriver: true }
+        ).start();
+    }
     return (
-        <ScrollView contentContainerStyle={{ alignItems: "center", flexGrow: rooms.length === 0 ? 1 : undefined, justifyContent: rooms.length === 0 ? "center" : undefined }} style={styles.container}>
-            {
-                rooms.length === 0 ?
-                    <Text style={styles.text}>No Room Available!</Text> :
-                    rooms.map((room, index) => {
-                        return <RoomInfo isDark={isDark} hostName={room.host.name} hostPlayer={room.guest.player === "O" ? "X" : "O"} roomId={room.id} key={index} />
-                    })
+        <View style={styles.container}>
+            {rooms ? rooms.length !== 0 ?
+                <View style={{ flexDirection: "row", justifyContent: "center" }}>
+                    <Animated.View style={{ width: "99%", left: animPos }}>
+                        <TextInput maxLength={20} textAlign={"center"} disableFullscreenUI={true} placeholderTextColor={isDark ? "grey" : ""} placeholder="Enter your Name" style={styles.input} value={name} onChangeText={setName} />
+                    </Animated.View>
+                </View> : null : null
             }
-        </ScrollView>
+            <ScrollView contentContainerStyle={{ alignItems: "center", flexGrow: rooms ? rooms.length === 0 ? 1 : undefined : 1, justifyContent: rooms ? rooms.length === 0 ? "center" : undefined : "center" }}>
+                {
+                    rooms ?
+                        isFetched ?
+                            rooms.length === 0 ?
+                                <Text style={styles.text}>No Room Available!</Text> :
+                                rooms.map((room, index) => {
+                                    return <RoomInfo playerName={name} setIsGame={setIsGame} navigation={navigation} joinName={name} isDark={isDark} hostName={room.host.name} hostPlayer={room.guest.player === "O" ? "X" : "O"} roomId={room.id} key={index} />
+                                }) :
+                            <ActivityIndicator size={"large"} /> :
+                        <>
+                            <Text style={styles.text}>Something went wrong!</Text>
+                        </>
+
+
+                }
+            </ScrollView>
+        </View>
     )
 }
 

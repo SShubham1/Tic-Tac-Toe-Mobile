@@ -8,13 +8,13 @@ import { Provider } from 'react-native-paper';
 import RoomScreen from './app/screens/RoomScreen';
 import { HEAD_BG_COLOR_DARK, HEAD_BG_COLOR_LIGHT } from './app/colors';
 import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { io } from 'socket.io-client';
 
 const Stack = createStackNavigator();
 const AsyncStorage = useAsyncStorage("theme");
 
 export default function App() {
   const [isDark, setisDark] = React.useState(Appearance.getColorScheme() === "dark");
+  const [isGame, setIsGame] = React.useState(false);
 
   function setDark(isDark: boolean) {
     setisDark(isDark);
@@ -37,10 +37,10 @@ export default function App() {
             header: (props) => <CustomAppBar isDark={isDark} setisDark={setDark} {...props} />,
           }}>
           <Stack.Screen name="Home">
-            {props => <MainScreen {...props} isDark={isDark} />}
+            {props => <MainScreen setIsGame={setIsGame} isGame={isGame} {...props} isDark={isDark} />}
           </Stack.Screen>
           <Stack.Screen name="Rooms">
-            {props => <RoomScreen {...props} isDark={isDark} />}
+            {props => <RoomScreen setIsGame={setIsGame} isGame={isGame} {...props} isDark={isDark} />}
           </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
