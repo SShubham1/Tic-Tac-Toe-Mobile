@@ -50,6 +50,7 @@ workflows:
         script: | 
           yarn install
           yarn global add expo-cli
+          export PATH="$(yarn global bin):$PATH"
           expo eject
       - name: Set Info.plist values
         script: | 
