@@ -26,7 +26,7 @@ export default function App() {
     else
       AsyncStorage.setItem(isDark ? "dark" : "light");
   })
-  if (Platform.OS === "ios") {
+  if (Platform.OS === "android") {
     StatusBar.setBackgroundColor(isDark ? HEAD_BG_COLOR_DARK : HEAD_BG_COLOR_LIGHT);
     StatusBar.setBarStyle(isDark ? "light-content" : "dark-content");
   }
