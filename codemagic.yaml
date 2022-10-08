@@ -48,9 +48,8 @@ workflows:
     scripts:
       - name: Install Expo CLI and eject
         script: | 
-          yarn install
-          yarn global add expo-cli
-          export PATH="$(yarn global bin):$PATH"
+          npm install
+          npm install -g expo-cli
           expo eject
       - name: Set Info.plist values
         script: | 
