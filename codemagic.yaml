@@ -40,6 +40,7 @@ workflows:
     name: React Native iOS
     max_build_duration: 120
     instance_type: mac_mini_m1
+    environment:
       vars:
         BUNDLE_ID: "com.sshubham1.TicTacToeMultiplayer"
         XCODE_WORKSPACE: "TicTacToeMultiplayer.xcworkspace" # <-- Put the name of your Xcode workspace here
