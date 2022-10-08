@@ -1,4 +1,4 @@
-import { StatusBar, Appearance } from 'react-native'
+import { StatusBar, Appearance, Platform } from 'react-native'
 import MainScreen from './app/screens/MainScreen';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -26,8 +26,10 @@ export default function App() {
     else
       AsyncStorage.setItem(isDark ? "dark" : "light");
   })
-  StatusBar.setBackgroundColor(isDark ? HEAD_BG_COLOR_DARK : HEAD_BG_COLOR_LIGHT);
-  StatusBar.setBarStyle(isDark ? "light-content" : "dark-content");
+  if (Platform.OS === "ios") {
+    StatusBar.setBackgroundColor(isDark ? HEAD_BG_COLOR_DARK : HEAD_BG_COLOR_LIGHT);
+    StatusBar.setBarStyle(isDark ? "light-content" : "dark-content");
+  }
   return (
     <Provider>
       <NavigationContainer>
