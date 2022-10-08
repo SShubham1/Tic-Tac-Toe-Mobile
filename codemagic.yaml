@@ -59,8 +59,8 @@ workflows:
       - name: Install CocoaPods dependencies
         script: | 
           cd ios && pod install
-      #- name: Set up provisioning profiles settings on Xcode project
-      #  script: xcode-project use-profiles
+      - name: Set up provisioning profiles settings on Xcode project
+        script: xcode-project use-profiles
       - name: Build ipa for distribution
         script: | 
           xcode-project build-ipa \
