@@ -43,6 +43,7 @@ workflows:
     environment:
       ios_signing:
         bundle_identifier: com.sshubham1.TicTacToeMultiplayer
+        distribution_type: ad_hoc
       vars:
         BUNDLE_ID: "com.sshubham1.TicTacToeMultiplayer"
         XCODE_WORKSPACE: "TicTacToeMultiplayer.xcworkspace" # <-- Put the name of your Xcode workspace here
