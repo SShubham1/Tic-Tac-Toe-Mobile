@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-native-reanimated/android/build.gradle b/node_modules/react-native-reanimated/android/build.gradle
+index 6b5e3fc..5da2996 100644
+--- a/node_modules/react-native-reanimated/android/build.gradle
++++ b/node_modules/react-native-reanimated/android/build.gradle
+@@ -371,7 +371,7 @@ task createNativeDepsDirectories(dependsOn: applyJavaPatches) {
+ 
+ task downloadBoost(dependsOn: createNativeDepsDirectories, type: Download) {
+     def transformedVersion = BOOST_VERSION.replace("_", ".")
+-    def srcUrl = "https://boostorg.jfrog.io/artifactory/main/release/${transformedVersion}/source/boost_${BOOST_VERSION}.tar.gz"
++    def srcUrl = "https://downloads.sourceforge.net/project/boost/boost/${transformedVersion}/boost_${BOOST_VERSION}.tar.gz"
+     if (rnMinorVersion < 69) {
+         srcUrl = "https://github.com/react-native-community/boost-for-react-native/releases/download/v${transformedVersion}-0/boost_${BOOST_VERSION}.tar.gz"
+     }
